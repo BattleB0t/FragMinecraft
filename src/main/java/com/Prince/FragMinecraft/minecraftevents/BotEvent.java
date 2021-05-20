@@ -1,4 +1,4 @@
-package com.Prince.FragMinecraft.MinecraftEvents;
+package com.Prince.FragMinecraft.minecraftevents;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
