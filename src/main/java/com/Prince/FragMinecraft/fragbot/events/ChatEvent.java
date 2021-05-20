@@ -14,7 +14,7 @@ import java.util.regex.Pattern;
 public class ChatEvent implements Listener {
     @BotEvent
     public void onChatMessage(MinecraftChatEvent e) {
-        System.out.println("Chat Message Recieved: " + e.getMessageText());
+        //e.getBotInstance().log("Chat Message Received: " + e.getMessageText());
 
         Pattern partyInvitePattern = Pattern.compile("-----------------------------\\\\n(?:\\[[a-zA-Z+]+\\] *)?(.+) has",Pattern.MULTILINE);
         Matcher getIgn = partyInvitePattern.matcher(e.getMessageText());
@@ -27,16 +27,7 @@ public class ChatEvent implements Listener {
         if(ign==null){
             return;
         }
-        System.out.println("Recieved party invite from user: "+ign);
-        e.getBotInstance().getClient().send(new ClientChatPacket("/party join "+ign));
-        new Thread(()->{
-            try {
-                Thread.sleep(3500);
-            } catch (InterruptedException interruptedException) {
-                interruptedException.printStackTrace();
-            }
-            e.getBotInstance().getClient().send(new ClientChatPacket("/party leave"));
-        }).start();
-
+        e.getBotInstance().log("Received party invite from player: "+ign);
+        e.getBotInstance().getQueueHandler().addToQueue(ign);
     }
 }

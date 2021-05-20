@@ -33,18 +33,26 @@ public class FragBot {
     private final String host;
     private final int port;
     private final EventHandler eventHandler;
-    private final String botname;
+    private final FragBotConfig config;
     private Session client;
     private FragBot fragBot;
-    public FragBot(String email, String password, String host, int port, String botname) {
+    private QueueHandler queueHandler;
+    public FragBot(String email, String password, String host, int port, FragBotConfig config) {
         this.email = email;
         this.password = password;
         this.host = host;
         this.port = port;
         this.eventHandler = new EventHandler();
-        this.botname = botname;
+        this.config = config;
         this.fragBot = this;
+        this.queueHandler = new QueueHandler(fragBot);
         loadDefaultEvents();
+    }
+    public QueueHandler getQueueHandler(){
+        return queueHandler;
+    }
+    public FragBotConfig getConfig(){
+        return config;
     }
     public EventHandler getEventHandler(){
         return eventHandler;
@@ -140,6 +148,9 @@ public class FragBot {
     private void loadDefaultEvents() {
         getEventHandler().registerEvents(new ChatEvent());
         getEventHandler().registerEvents(new JoinEvent());
+    }
+    public void log(String msg){
+        System.out.println("["+getConfig().getBotName()+"] "+msg);
     }
     public Session getClient(){
         return client;
