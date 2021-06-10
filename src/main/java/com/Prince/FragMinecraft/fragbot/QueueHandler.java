@@ -1,5 +1,9 @@
 package com.Prince.FragMinecraft.fragbot;
 
+import club.minnced.discord.webhook.send.WebhookEmbed;
+import club.minnced.discord.webhook.send.WebhookEmbedBuilder;
+import com.Prince.FragMinecraft.minecraftevents.events.FragBotJoinEvent;
+import com.Prince.FragMinecraft.utils.EmbedBuilder;
 import com.github.steveice10.mc.protocol.packet.ingame.client.ClientChatPacket;
 
 import java.util.ArrayList;
@@ -33,7 +37,9 @@ public class QueueHandler {
             inPartyWith = queueIgns.get(0);
             joinParty(queueIgns.get(0));
             queueIgns.remove(0);
+            bot.getEventHandler().callEvent(new FragBotJoinEvent(inPartyWith,bot));
             bot.log("Joined party of player: "+inPartyWith);
+            bot.getWebhookClient().send(new EmbedBuilder(bot).setDescription(""+bot.getBotName()+" has joined "+inPartyWith+"'s party!\nQueue Length: "+queueIgns.size()+"").setImage("https://mc-heads.net/avatar/"+inPartyWith+"/100").build());
         }else{
             if(System.currentTimeMillis()>=botLeaveTimeStamp&&botLeaveTimeStamp!=0){
                 botLeaveTimeStamp = 0;
@@ -50,6 +56,7 @@ public class QueueHandler {
         bot.getClient().send(new ClientChatPacket("/party leave"));
     }
     public void addToQueue(String ign){
+        if(queueIgns.contains(ign)||queueIgns.size()*bot.getConfig().getWaitTime()+bot.getConfig().getWaitTime()>60000) return;
         queueIgns.add(ign);
     }
 }

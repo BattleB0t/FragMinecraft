@@ -1,10 +1,14 @@
 package com.Prince.FragMinecraft.fragbot;
 
+import club.minnced.discord.webhook.WebhookClient;
+import club.minnced.discord.webhook.WebhookClientBuilder;
 import com.Prince.FragMinecraft.fragbot.events.ChatEvent;
+import com.Prince.FragMinecraft.fragbot.events.CheckEvent;
 import com.Prince.FragMinecraft.fragbot.events.JoinEvent;
 import com.Prince.FragMinecraft.minecraftevents.EventHandler;
 import com.Prince.FragMinecraft.minecraftevents.events.MinecraftChatEvent;
 import com.Prince.FragMinecraft.minecraftevents.events.ServerJoinEvent;
+import com.github.steveice10.mc.auth.data.GameProfile;
 import com.github.steveice10.mc.auth.exception.request.RequestException;
 import com.github.steveice10.mc.auth.service.AuthenticationService;
 import com.github.steveice10.mc.auth.service.SessionService;
@@ -37,6 +41,8 @@ public class FragBot {
     private Session client;
     private FragBot fragBot;
     private QueueHandler queueHandler;
+    private WebhookClient webhookClient;
+    private String botName;
     public FragBot(String email, String password, String host, int port, FragBotConfig config) {
         this.email = email;
         this.password = password;
@@ -46,7 +52,11 @@ public class FragBot {
         this.config = config;
         this.fragBot = this;
         this.queueHandler = new QueueHandler(fragBot);
+        this.webhookClient = new WebhookClientBuilder(config.getWebhookUrl()).build();
         loadDefaultEvents();
+    }
+    public WebhookClient getWebhookClient(){
+        return webhookClient;
     }
     public QueueHandler getQueueHandler(){
         return queueHandler;
@@ -61,8 +71,11 @@ public class FragBot {
         getServerStatus();
         login();
     }
-    public void log(){
-        System.out.println("");
+    public String getBotName() {
+        return botName;
+    }
+    public void sendMessage(String message){
+        client.send(new ClientChatPacket(message));
     }
     public void getServerStatus(){
         SessionService sessionService = new SessionService();
@@ -117,6 +130,9 @@ public class FragBot {
         client.addListener(new SessionAdapter() {
             @Override
             public void packetReceived(PacketReceivedEvent event) {
+                if(botName==null){
+                    botName = ((GameProfile) client.getFlag("profile")).getName();
+                }
                 if(event.getPacket() instanceof ServerJoinGamePacket){
                     ServerJoinGamePacket packet = event.getPacket();
                     getEventHandler().callEvent(new ServerJoinEvent(packet,fragBot));
@@ -148,6 +164,7 @@ public class FragBot {
     private void loadDefaultEvents() {
         getEventHandler().registerEvents(new ChatEvent());
         getEventHandler().registerEvents(new JoinEvent());
+        getEventHandler().registerEvents(new CheckEvent());
     }
     public void log(String msg){
         System.out.println("["+getConfig().getBotName()+"] "+msg);

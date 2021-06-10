@@ -4,6 +4,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class EventHandler {
     private ArrayList<CallableEvent> events;
@@ -19,21 +20,27 @@ public class EventHandler {
                 EventType eventType = EventType.getTypeFromClass(func.getParameterTypes()[0]);
                 if(eventType==null){
                     throw new IllegalArgumentException("Passed in invalid object, Class: "+listener.getClass().getName()+" Object: "+func.getParameterTypes()[0]);
-                }else{
-                    events.add(new CallableEvent(listener,func,eventType));
-                    System.out.println("Added event hook: "+func.getName());
                 }
+                if(eventType == EventType.FragBotCheckEvent) {
+                    if (!func.getReturnType().equals(Boolean.class)&&!func.getReturnType().equals(boolean.class)) {
+                        throw new IllegalArgumentException("Function needs to return a boolean, Class: " + listener.getClass().getName() + " Object: " + func.getParameterTypes()[0]);
+                    }
+                }
+                events.add(new CallableEvent(listener,func,eventType));
+                System.out.println("Added event hook: "+func.getName());
+
             }
         }
         return  this;
     }
-    public EventHandler callEvent(Event e){
+    public List<Object> callEvent(Event e){
         String eventName = e.getName();
+        ArrayList<Object> returned = new ArrayList<>();
         events.forEach((callableEvent) -> {
             if(callableEvent.getEventType().equals(EventType.valueOf(eventName))){
-                callableEvent.call(e);
+                returned.add(callableEvent.call(e));
             }
         });
-        return this;
+        return returned;
     }
 }

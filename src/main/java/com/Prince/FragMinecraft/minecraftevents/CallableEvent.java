@@ -25,11 +25,12 @@ public class CallableEvent {
         return eventType;
     }
 
-    public void call(Event e){
+    public Object call(Event e){
         try {
-            func.invoke(listener,e);
+            return func.invoke(listener,e);
         } catch (IllegalAccessException | InvocationTargetException illegalAccessException) {
             illegalAccessException.printStackTrace();
+            return null;
         }
     }
 }

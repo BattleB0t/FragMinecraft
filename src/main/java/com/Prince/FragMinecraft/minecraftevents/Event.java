@@ -1,7 +1,7 @@
 package com.Prince.FragMinecraft.minecraftevents;
 
-public abstract class Event {
-    public String getName() {
+public abstract interface Event {
+    default String getName() {
         return this.getClass().getSimpleName();
     }
 }

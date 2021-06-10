@@ -1,7 +1,7 @@
 package com.Prince.FragMinecraft.minecraftevents;
 
 public enum EventType {
-    MinecraftChatEvent,ServerJoinEvent;
+    MinecraftChatEvent,ServerJoinEvent,FragBotCheckEvent,FragBotJoinEvent;
     public static EventType getTypeFromClass(Class<?> clazz) {
         try{
             return EventType.valueOf(clazz.getSimpleName());

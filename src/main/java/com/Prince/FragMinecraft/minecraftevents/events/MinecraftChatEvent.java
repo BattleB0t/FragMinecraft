@@ -7,7 +7,7 @@ import com.github.steveice10.packetlib.Session;
 
 import java.util.UUID;
 
-public class MinecraftChatEvent extends Event {
+public class MinecraftChatEvent implements Event {
     private String rawText;
     private String messageText;
     private FragBot botInstance;
