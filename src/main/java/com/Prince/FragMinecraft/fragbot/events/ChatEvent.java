@@ -1,18 +1,10 @@
 package com.Prince.FragMinecraft.fragbot.events;
 
-import com.Prince.FragMinecraft.FragMinecraft;
-import com.Prince.FragMinecraft.fragbot.FragBot;
 import com.Prince.FragMinecraft.minecraftevents.BotEvent;
-import com.Prince.FragMinecraft.minecraftevents.Event;
-import com.Prince.FragMinecraft.minecraftevents.EventHandler;
 import com.Prince.FragMinecraft.minecraftevents.Listener;
 import com.Prince.FragMinecraft.minecraftevents.events.FragBotCheckEvent;
 import com.Prince.FragMinecraft.minecraftevents.events.MinecraftChatEvent;
-import com.github.steveice10.mc.protocol.packet.ingame.client.ClientChatPacket;
-import com.google.gson.Gson;
-import com.google.gson.JsonObject;
 
-import java.awt.*;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;

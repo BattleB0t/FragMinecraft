@@ -3,7 +3,6 @@ package com.Prince.FragMinecraft.fragbot;
 import club.minnced.discord.webhook.WebhookClient;
 import club.minnced.discord.webhook.WebhookClientBuilder;
 import com.Prince.FragMinecraft.fragbot.events.ChatEvent;
-import com.Prince.FragMinecraft.fragbot.events.CheckEvent;
 import com.Prince.FragMinecraft.fragbot.events.JoinEvent;
 import com.Prince.FragMinecraft.minecraftevents.EventHandler;
 import com.Prince.FragMinecraft.minecraftevents.events.MinecraftChatEvent;
@@ -24,12 +23,10 @@ import com.github.steveice10.packetlib.event.session.DisconnectedEvent;
 import com.github.steveice10.packetlib.event.session.PacketReceivedEvent;
 import com.github.steveice10.packetlib.event.session.SessionAdapter;
 import com.github.steveice10.packetlib.tcp.TcpClientSession;
-import jdk.internal.util.xml.impl.Input;
 
 import java.net.Proxy;
 import java.util.Arrays;
 import java.util.Scanner;
-import java.util.UUID;
 
 public class FragBot {
     private final String email;
@@ -164,7 +161,6 @@ public class FragBot {
     private void loadDefaultEvents() {
         getEventHandler().registerEvents(new ChatEvent());
         getEventHandler().registerEvents(new JoinEvent());
-        getEventHandler().registerEvents(new CheckEvent());
     }
     public void log(String msg){
         System.out.println("["+getConfig().getBotName()+"] "+msg);
