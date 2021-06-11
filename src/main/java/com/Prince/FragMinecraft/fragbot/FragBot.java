@@ -7,6 +7,8 @@ import com.Prince.FragMinecraft.fragbot.events.JoinEvent;
 import com.Prince.FragMinecraft.minecraftevents.EventHandler;
 import com.Prince.FragMinecraft.minecraftevents.events.MinecraftChatEvent;
 import com.Prince.FragMinecraft.minecraftevents.events.ServerJoinEvent;
+import com.Prince.FragMinecraft.utils.ChatUtils;
+import com.Prince.FragMinecraft.utils.EmbedBuilder;
 import com.github.steveice10.mc.auth.data.GameProfile;
 import com.github.steveice10.mc.auth.exception.request.RequestException;
 import com.github.steveice10.mc.auth.service.AuthenticationService;
@@ -143,7 +145,14 @@ public class FragBot {
 
             @Override
             public void disconnected(DisconnectedEvent event) {
-                System.out.println("Disconnected: " + event.getReason());
+                String reason = ChatUtils.parseChatMessage(event.getReason());
+                System.out.println("Disconnected: " + reason);
+                if(reason.contains("banned")){
+                    getWebhookClient().send(new EmbedBuilder(fragBot).setDescription("Bot has been BANNED fuck u hypixel").build());
+                }else{
+                    getWebhookClient().send(new EmbedBuilder(fragBot).setDescription("Bot has been disconnected, reconnecting...").build());
+                    client.connect();
+                }
                 if(event.getCause() != null) {
                     event.getCause().printStackTrace();
                 }
