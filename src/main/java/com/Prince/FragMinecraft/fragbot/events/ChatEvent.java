@@ -12,7 +12,7 @@ import java.util.regex.Pattern;
 public class ChatEvent implements Listener {
     @BotEvent
     public void onChatMessage(MinecraftChatEvent e) {
-        //e.getBotInstance().log("Chat Message Received: " + e.getMessageText());
+        e.getBotInstance().log("Chat Message Received: " + e.getMessageText());
 
         Pattern partyInvitePattern = Pattern.compile("-----------------------------\\\\n(?:\\[[a-zA-Z+]+\\] *)?(.+) has",Pattern.MULTILINE);
         Matcher getIgn = partyInvitePattern.matcher(e.getMessageText());

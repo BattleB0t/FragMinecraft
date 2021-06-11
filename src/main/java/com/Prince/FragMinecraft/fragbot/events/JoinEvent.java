@@ -7,7 +7,7 @@ import com.Prince.FragMinecraft.utils.EmbedBuilder;
 import com.github.steveice10.mc.protocol.packet.ingame.client.ClientChatPacket;
 
 public class JoinEvent implements Listener {
-    private boolean sent = false;
+    public static boolean sent = false;
     @BotEvent
     public void onJoin(ServerJoinEvent event) {
         if(!sent) {

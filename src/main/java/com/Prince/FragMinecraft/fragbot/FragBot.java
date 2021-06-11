@@ -38,6 +38,7 @@ public class FragBot {
     private final EventHandler eventHandler;
     private final FragBotConfig config;
     private Session client;
+    private Session baseClient;
     private FragBot fragBot;
     private QueueHandler queueHandler;
     private WebhookClient webhookClient;
@@ -77,33 +78,8 @@ public class FragBot {
         client.send(new ClientChatPacket(message));
     }
     public void getServerStatus(){
-        SessionService sessionService = new SessionService();
-        sessionService.setProxy(Proxy.NO_PROXY);
 
-        MinecraftProtocol protocol = new MinecraftProtocol();
-        Session client = new TcpClientSession(host, port, protocol, null);
-        client.setFlag(MinecraftConstants.SESSION_SERVICE_KEY, sessionService);
-        client.setFlag(MinecraftConstants.SERVER_INFO_HANDLER_KEY, (ServerInfoHandler) (session, info) -> {
-            System.out.println("Version: " + info.getVersionInfo().getVersionName()
-                    + ", " + info.getVersionInfo().getProtocolVersion());
-            System.out.println("Player Count: " + info.getPlayerInfo().getOnlinePlayers()
-                    + " / " + info.getPlayerInfo().getMaxPlayers());
-            System.out.println("Players: " + Arrays.toString(info.getPlayerInfo().getPlayers()));
-            System.out.println("Description: " + info.getDescription());
-            System.out.println("Icon: " + Arrays.toString(info.getIconPng()));
-        });
 
-        client.setFlag(MinecraftConstants.SERVER_PING_TIME_HANDLER_KEY, (ServerPingTimeHandler) (session, pingTime) ->
-                System.out.println("Server ping took " + pingTime + "ms"));
-
-        client.connect();
-        while(client.isConnected()) {
-            try {
-                Thread.sleep(5);
-            } catch(InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
     }
     private void login() {
         MinecraftProtocol protocol;
@@ -120,7 +96,6 @@ public class FragBot {
             e.printStackTrace();
             return;
         }
-
         SessionService sessionService = new SessionService();
         sessionService.setProxy(Proxy.NO_PROXY);
         Session client = new TcpClientSession(host, port, protocol, null);
@@ -151,7 +126,14 @@ public class FragBot {
                     getWebhookClient().send(new EmbedBuilder(fragBot).setDescription("Bot has been BANNED fuck u hypixel").build());
                 }else{
                     getWebhookClient().send(new EmbedBuilder(fragBot).setDescription("Bot has been disconnected, reconnecting...").build());
-                    client.connect();
+                    System.out.println("Reconnecting in 5 seconds");
+                    JoinEvent.sent = false;
+                    try {
+                        Thread.sleep(5000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    start();
                 }
                 if(event.getCause() != null) {
                     event.getCause().printStackTrace();
@@ -159,13 +141,13 @@ public class FragBot {
             }
         });
         client.connect();
-        new Thread(()->{
-            while (true) {
-                Scanner sc = new Scanner(System.in);
-                String command = sc.nextLine();
-                getClient().send(new ClientChatPacket(command));
+        while(client.isConnected()) {
+            try {
+                Thread.sleep(5);
+            } catch(InterruptedException e) {
+                e.printStackTrace();
             }
-        }).start();
+        }
     }
     private void loadDefaultEvents() {
         getEventHandler().registerEvents(new ChatEvent());
