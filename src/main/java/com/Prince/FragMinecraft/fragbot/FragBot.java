@@ -5,6 +5,7 @@ import club.minnced.discord.webhook.WebhookClientBuilder;
 import com.Prince.FragMinecraft.fragbot.events.ChatEvent;
 import com.Prince.FragMinecraft.fragbot.events.JoinEvent;
 import com.Prince.FragMinecraft.minecraftevents.EventHandler;
+import com.Prince.FragMinecraft.minecraftevents.events.FragBotBannedEvent;
 import com.Prince.FragMinecraft.minecraftevents.events.MinecraftChatEvent;
 import com.Prince.FragMinecraft.minecraftevents.events.ServerJoinEvent;
 import com.Prince.FragMinecraft.utils.ChatUtils;
@@ -124,6 +125,7 @@ public class FragBot {
                 System.out.println("Disconnected: " + reason);
                 if(reason.contains("banned")){
                     getWebhookClient().send(new EmbedBuilder(fragBot).setDescription("Bot has been BANNED fuck u hypixel").build());
+                    getEventHandler().callEvent(new FragBotBannedEvent(fragBot));
                 }else{
                     getWebhookClient().send(new EmbedBuilder(fragBot).setDescription("Bot has been disconnected, reconnecting...").build());
                     System.out.println("Reconnecting in 5 seconds");
