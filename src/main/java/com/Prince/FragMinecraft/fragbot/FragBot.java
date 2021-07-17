@@ -68,7 +68,7 @@ public class FragBot {
     public EventHandler getEventHandler(){
         return eventHandler;
     }
-    public void start(){
+    public void start() throws RequestException, InterruptedException {
         getServerStatus();
         login();
     }
@@ -82,21 +82,16 @@ public class FragBot {
 
 
     }
-    private void login() {
+    private void login() throws RequestException, InterruptedException {
         MinecraftProtocol protocol;
-        try {
-            AuthenticationService authService = new AuthenticationService();
-            authService.setUsername(email);
-            authService.setPassword(password);
-            authService.setProxy(Proxy.NO_PROXY);
-            authService.login();
+        AuthenticationService authService = new AuthenticationService();
+        authService.setUsername(email);
+        authService.setPassword(password);
+        authService.setProxy(Proxy.NO_PROXY);
+        authService.login();
 
-            protocol = new MinecraftProtocol(authService.getSelectedProfile(), authService.getAccessToken());
-            System.out.println("Successfully authenticated user.");
-        } catch(RequestException e) {
-            e.printStackTrace();
-            return;
-        }
+        protocol = new MinecraftProtocol(authService.getSelectedProfile(), authService.getAccessToken());
+        System.out.println("Successfully authenticated user.");
         SessionService sessionService = new SessionService();
         sessionService.setProxy(Proxy.NO_PROXY);
         Session client = new TcpClientSession(host, port, protocol, null);
@@ -135,7 +130,11 @@ public class FragBot {
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
-                    start();
+                    try {
+                        start();
+                    } catch (RequestException | InterruptedException e) {
+                        e.printStackTrace();
+                    }
                 }
                 if(event.getCause() != null) {
                     event.getCause().printStackTrace();
@@ -144,11 +143,7 @@ public class FragBot {
         });
         client.connect();
         while(client.isConnected()) {
-            try {
-                Thread.sleep(5);
-            } catch(InterruptedException e) {
-                e.printStackTrace();
-            }
+            Thread.sleep(5);
         }
     }
     private void loadDefaultEvents() {
