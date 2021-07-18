@@ -59,6 +59,21 @@ public class FragBot {
         }
         loadDefaultEvents();
     }
+    public FragBot(String email, String password, String host, int port, FragBotConfig config,boolean testMode) {
+        this.testMode = testMode;
+        this.email = email;
+        this.password = password;
+        this.host = host;
+        this.port = port;
+        this.eventHandler = new EventHandler();
+        this.config = config;
+        this.fragBot = this;
+        this.queueHandler = new QueueHandler(fragBot);
+        if(!this.testMode) {
+            this.webhookClient = new WebhookClientBuilder(config.getWebhookUrl()).build();
+        }
+        loadDefaultEvents();
+    }
     public WebhookClient getWebhookClient(){
         return webhookClient;
     }
