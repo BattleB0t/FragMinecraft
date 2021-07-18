@@ -44,6 +44,7 @@ public class FragBot {
     private QueueHandler queueHandler;
     private WebhookClient webhookClient;
     private String botName;
+    public Boolean testMode = false;
     public FragBot(String email, String password, String host, int port, FragBotConfig config) {
         this.email = email;
         this.password = password;
@@ -119,23 +120,25 @@ public class FragBot {
                 String reason = ChatUtils.parseChatMessage(event.getReason());
                 System.out.println("Disconnected: " + reason);
                 if(reason.contains("banned")){
-                    getWebhookClient().send(new EmbedBuilder(fragBot).setDescription("Bot has been BANNED fuck u hypixel").build());
-                    getEventHandler().callEvent(new FragBotBannedEvent(fragBot));
-                }else if(reason.equalsIgnoreCase("shutdown")) {
-                    return;
-                }else{
-                    getWebhookClient().send(new EmbedBuilder(fragBot).setDescription("Bot has been disconnected, reconnecting...").build());
-                    System.out.println("Reconnecting in 5 seconds");
-                    JoinEvent.sent = false;
-                    try {
-                        Thread.sleep(5000);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
+                    if(!testMode) {
+                        getWebhookClient().send(new EmbedBuilder(fragBot).setDescription("Bot has been BANNED fuck u hypixel").build());
                     }
-                    try {
-                        start();
-                    } catch (RequestException | InterruptedException e) {
-                        e.printStackTrace();
+                    getEventHandler().callEvent(new FragBotBannedEvent(fragBot));
+                }else{
+                    if(!testMode) {
+                        getWebhookClient().send(new EmbedBuilder(fragBot).setDescription("Bot has been disconnected, reconnecting...").build());
+                        System.out.println("Reconnecting in 5 seconds");
+                        JoinEvent.sent = false;
+                        try {
+                            Thread.sleep(5000);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                        try {
+                            start();
+                        } catch (RequestException | InterruptedException e) {
+                            e.printStackTrace();
+                        }
                     }
                 }
                 if(event.getCause() != null) {
