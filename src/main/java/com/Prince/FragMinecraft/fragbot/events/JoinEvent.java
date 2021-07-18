@@ -11,7 +11,9 @@ public class JoinEvent implements Listener {
     @BotEvent
     public void onJoin(ServerJoinEvent event) {
         if(!sent) {
-            event.getBotInstance().getWebhookClient().send(new EmbedBuilder(event.getBotInstance()).setDescription("Bot: `" + event.getBotInstance().getBotName() + "` has joined server with ip: `" + event.getBotInstance().getClient().getHost() + "`").build());
+            if(!event.getBotInstance().testMode) {
+                event.getBotInstance().getWebhookClient().send(new EmbedBuilder(event.getBotInstance()).setDescription("Bot: `" + event.getBotInstance().getBotName() + "` has joined server with ip: `" + event.getBotInstance().getClient().getHost() + "`").build());
+            }
             sent = true;
         }
         event.getBotInstance().getClient().send(new ClientChatPacket("/achat §a"));
