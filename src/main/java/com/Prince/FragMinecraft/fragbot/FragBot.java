@@ -54,7 +54,9 @@ public class FragBot {
         this.config = config;
         this.fragBot = this;
         this.queueHandler = new QueueHandler(fragBot);
-        this.webhookClient = new WebhookClientBuilder(config.getWebhookUrl()).build();
+        if(!testMode) {
+            this.webhookClient = new WebhookClientBuilder(config.getWebhookUrl()).build();
+        }
         loadDefaultEvents();
     }
     public WebhookClient getWebhookClient(){
