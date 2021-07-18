@@ -121,6 +121,8 @@ public class FragBot {
                 if(reason.contains("banned")){
                     getWebhookClient().send(new EmbedBuilder(fragBot).setDescription("Bot has been BANNED fuck u hypixel").build());
                     getEventHandler().callEvent(new FragBotBannedEvent(fragBot));
+                }else if(reason.equalsIgnoreCase("shutdown")) {
+                    return;
                 }else{
                     getWebhookClient().send(new EmbedBuilder(fragBot).setDescription("Bot has been disconnected, reconnecting...").build());
                     System.out.println("Reconnecting in 5 seconds");
