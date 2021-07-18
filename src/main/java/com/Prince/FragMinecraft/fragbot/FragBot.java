@@ -126,6 +126,10 @@ public class FragBot {
                     getEventHandler().callEvent(new ServerJoinEvent(packet,fragBot));
                 }
                 if(event.getPacket() instanceof ServerChatPacket) {
+                    if(testMode){
+                        event.getSession().disconnect("a");
+                        return;
+                    }
                     ServerChatPacket packet = event.getPacket();
                     String message = packet.getMessage().toString();
                     getEventHandler().callEvent(new MinecraftChatEvent(message,fragBot));
