@@ -23,7 +23,7 @@ public class QueueHandler {
         new Thread(() -> {
             while (true) {
                 try {
-                    Thread.sleep(25);
+                    Thread.sleep(110);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
