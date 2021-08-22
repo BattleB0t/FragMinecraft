@@ -147,18 +147,23 @@ public class FragBot {
                     getEventHandler().callEvent(new FragBotBannedEvent(fragBot));
                 }else{
                     if(!testMode) {
-                        getWebhookClient().send(new EmbedBuilder(fragBot).setDescription("Bot has been disconnected, reconnecting...").build());
-                        System.out.println("Reconnecting in 5 seconds");
-                        JoinEvent.sent = false;
-                        try {
-                            Thread.sleep(5000);
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
-                        try {
-                            start();
-                        } catch (RequestException | InterruptedException e) {
-                            e.printStackTrace();
+                        while(true) {
+                            try {
+                                getWebhookClient().send(new EmbedBuilder(fragBot).setDescription("Bot has been disconnected, reconnecting...").build());
+                                System.out.println("Reconnecting in 5 seconds");
+                                JoinEvent.sent = false;
+                            }catch(Exception ignored){ }
+                            try {
+                                Thread.sleep(5000);
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+                            try {
+                                start();
+                                break;
+                            } catch (RequestException | InterruptedException e) {
+                                e.printStackTrace();
+                            }
                         }
                     }
                 }
