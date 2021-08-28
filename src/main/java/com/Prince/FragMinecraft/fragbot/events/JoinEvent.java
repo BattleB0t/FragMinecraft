@@ -16,6 +16,6 @@ public class JoinEvent implements Listener {
             }
             sent = true;
         }
-        event.getBotInstance().getClient().send(new ClientChatPacket("/achat §a"));
+        event.getBotInstance().getClient().send(new ClientChatPacket("/lobby housing"));
     }
 }
