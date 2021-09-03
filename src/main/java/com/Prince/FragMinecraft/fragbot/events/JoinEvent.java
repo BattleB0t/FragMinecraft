@@ -16,6 +16,6 @@ public class JoinEvent implements Listener {
             }
             sent = true;
         }
-        event.getBotInstance().getCommandQueue().addToQueue("/lobby housing");
+        event.getBotInstance().getCommandQueue().addToQueue("/home");
     }
 }
