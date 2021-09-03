@@ -42,6 +42,7 @@ public class FragBot {
     private Session baseClient;
     private FragBot fragBot;
     private QueueHandler queueHandler;
+    private CommandQueue commandQueue;
     private WebhookClient webhookClient;
     private String botName;
     public Boolean testMode = false;
@@ -53,6 +54,7 @@ public class FragBot {
         this.eventHandler = new EventHandler();
         this.config = config;
         this.fragBot = this;
+        this.commandQueue = new CommandQueue(fragBot);
         this.queueHandler = new QueueHandler(fragBot);
         if(!testMode) {
             this.webhookClient = new WebhookClientBuilder(config.getWebhookUrl()).build();
@@ -181,6 +183,11 @@ public class FragBot {
         getEventHandler().registerEvents(new ChatEvent());
         getEventHandler().registerEvents(new JoinEvent());
     }
+
+    public CommandQueue getCommandQueue() {
+        return commandQueue;
+    }
+
     public void log(String msg){
         System.out.println("["+getConfig().getBotName()+"] "+msg);
     }

@@ -50,10 +50,10 @@ public class QueueHandler {
         }
     }
     public void joinParty(String ign){
-        bot.getClient().send(new ClientChatPacket("/party join "+ign));
+        bot.getCommandQueue().addToQueue("/party join "+ign);
     }
     public void leaveParty(){
-        bot.getClient().send(new ClientChatPacket("/party leave"));
+        bot.getCommandQueue().addToQueue("/party leave");
     }
     public void addToQueue(String ign){
         if(queueIgns.contains(ign)||queueIgns.size()*bot.getConfig().getWaitTime()+bot.getConfig().getWaitTime()>60000) return;
