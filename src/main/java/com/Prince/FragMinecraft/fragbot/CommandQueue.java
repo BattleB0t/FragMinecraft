@@ -8,6 +8,7 @@ import java.util.List;
 public class CommandQueue {
     ArrayList<String> commands = new ArrayList<>();
     FragBot bot;
+    private int counter = 0;
     public CommandQueue(FragBot bot) {
         this.bot = bot;
         start();
@@ -25,10 +26,15 @@ public class CommandQueue {
         }).start();
     }
     private void tick(){
+        counter++;
         if(!commands.isEmpty()){
             String command = commands.get(0);
             bot.getClient().send(new ClientChatPacket(command));
             commands.remove(0);
+            counter=0;
+        }else if(counter>=300){
+            bot.getClient().send(new ClientChatPacket("/home"));
+            counter=0;
         }
     }
     public void addToQueue(String command){
