@@ -13,7 +13,7 @@ public class ChatEvent implements Listener {
     @BotEvent
     public void onChatMessage(MinecraftChatEvent e) {
         e.getBotInstance().log("Chat Message Received: " + e.getMessageText());
-        if(e.getMessageText().contains("spawned in Limbo")){
+        if(e.getMessageText().toLowerCase().contains("spawned in limbo") || e.getMessageText().toLowerCase().contains("afk")){
             e.getBotInstance().getCommandQueue().addToQueue("/lobby");
             return;
         }
