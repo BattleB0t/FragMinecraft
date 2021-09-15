@@ -33,7 +33,7 @@ public class CommandQueue {
             commands.remove(0);
             counter=0;
         }else if(counter>=300){
-            bot.getClient().send(new ClientChatPacket("/home"));
+            bot.getClient().send(new ClientChatPacket("/lobby"));
             counter=0;
         }
     }

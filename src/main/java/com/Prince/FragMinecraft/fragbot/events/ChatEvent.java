@@ -13,7 +13,10 @@ public class ChatEvent implements Listener {
     @BotEvent
     public void onChatMessage(MinecraftChatEvent e) {
         e.getBotInstance().log("Chat Message Received: " + e.getMessageText());
-
+        if(e.getMessageText().contains("spawned in Limbo")){
+            e.getBotInstance().getCommandQueue().addToQueue("/lobby");
+            return;
+        }
         Pattern partyInvitePattern = Pattern.compile("-----------------------------\\\\n(?:\\[[a-zA-Z+]+\\] *)?(.+) has",Pattern.MULTILINE);
         Matcher getIgn = partyInvitePattern.matcher(e.getMessageText());
         String ign = null;
