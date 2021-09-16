@@ -33,6 +33,7 @@ public class CommandQueue {
             commands.remove(0);
             counter=0;
         }else if(counter>=300){
+            System.out.println("Bot has exited limbo (hopefully)");
             bot.getClient().send(new ClientChatPacket("/lobby"));
             counter=0;
         }
