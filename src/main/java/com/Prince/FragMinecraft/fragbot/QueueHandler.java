@@ -14,13 +14,14 @@ public class QueueHandler {
     long botLeaveTimeStamp=0;
     String inPartyWith;
     FragBot bot;
+    private Thread thr;
     public QueueHandler(FragBot bot){
         this.bot = bot;
         queueIgns = new ArrayList<String>();
         start();
     }
     private void start(){
-        new Thread(() -> {
+        thr = new Thread(() -> {
             while (true) {
                 try {
                     Thread.sleep(110);
@@ -29,7 +30,11 @@ public class QueueHandler {
                 }
                 tick();
             }
-        }).start();
+        });
+        thr.start();
+    }
+    public void stop(){
+        thr.stop();
     }
     private void tick(){
         if(queueIgns.size()>0&&botLeaveTimeStamp==0){

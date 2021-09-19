@@ -14,7 +14,7 @@ public class ChatEvent implements Listener {
     public void onChatMessage(MinecraftChatEvent e) {
         e.getBotInstance().log("Chat Message Received: " + e.getMessageText());
         if(e.getMessageText().toLowerCase().contains("spawned in limbo") || e.getMessageText().toLowerCase().contains("afk")){
-            e.getBotInstance().getCommandQueue().addToQueue("/lobby");
+            e.getBotInstance().getCommandQueue().addToQueue("/lobby housing");
             return;
         }
         Pattern partyInvitePattern = Pattern.compile("-----------------------------\\\\n(?:\\[[a-zA-Z+]+\\] *)?(.+) has",Pattern.MULTILINE);

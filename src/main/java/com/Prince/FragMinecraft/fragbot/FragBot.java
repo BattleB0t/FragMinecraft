@@ -92,6 +92,11 @@ public class FragBot {
         getServerStatus();
         login();
     }
+    public void stop(){
+        client.disconnect("force");
+        commandQueue.stop();
+        queueHandler.stop();
+    }
     public String getBotName() {
         return botName;
     }
@@ -142,6 +147,9 @@ public class FragBot {
             public void disconnected(DisconnectedEvent event) {
                 String reason = ChatUtils.parseChatMessage(event.getReason());
                 System.out.println("Disconnected: " + reason);
+                if(reason.contains("force")){
+                    return;
+                }
                 if(reason.contains("banned")){
                     if(!testMode) {
                         getWebhookClient().send(new EmbedBuilder(fragBot).setDescription("Bot has been BANNED fuck u hypixel").build());

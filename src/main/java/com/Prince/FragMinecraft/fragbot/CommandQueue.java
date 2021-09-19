@@ -9,21 +9,37 @@ public class CommandQueue {
     ArrayList<String> commands = new ArrayList<>();
     FragBot bot;
     private int counter = 0;
+    private int housingCdCounter = 0;
+    private Thread thr;
     public CommandQueue(FragBot bot) {
         this.bot = bot;
         start();
     }
     private void start(){
-        new Thread(() -> {
+        thr = new Thread(() -> {
             while (true) {
                 try {
                     Thread.sleep(100);
+                    if(housingCdCounter!=0){
+                        housingCdCounter--;
+                    }
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
                 tick();
             }
-        }).start();
+        });
+        thr.start();
+    }
+    public void sendToHousing(){
+        if(housingCdCounter==0){
+            housingCdCounter = 20;
+            System.out.println("Sending to housing Lobby");
+            bot.getCommandQueue().addToQueue("/lobby housing");
+        }
+    }
+    public void stop(){
+        thr.stop();
     }
     private void tick(){
         counter++;
@@ -31,10 +47,10 @@ public class CommandQueue {
             String command = commands.get(0);
             bot.getClient().send(new ClientChatPacket(command));
             commands.remove(0);
-            counter=0;
-        }else if(counter>=300){
+        }
+        if(counter>=300){
             System.out.println("Bot has exited limbo (hopefully)");
-            bot.getClient().send(new ClientChatPacket("/lobby"));
+            commands.add("/lobby housing");
             counter=0;
         }
     }
